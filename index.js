@@ -76,20 +76,17 @@ app.put('/productos/:id', (req, res) => {
 
 app.delete('/productos/:id', (req, res) => {
     // res.send('Eliminando Producto')
-    const id = req.params.id;
-    const datos = leerDatos()
-    const prodEncontrado = datos.productos.find((p) => p.id == req.params.id)
-    if (!prodEncontrado) {
-        return res.status(404).json(`No se encuentra el producto`)
+const id = req.params.id
+const sql =("DELETE FROM productos WHERE id= ?")
+db.query(sql,[id],(err, result)=>{
+    if(err){
+        console.error('Error al borrar')
+        return;
     }
-    datos.productos = datos.productos.filter((p) => p.id != req.params.id)
-    let indice = 1
-    datos.productos.map((p) => {
-        p.id = indice
-        indice++
-    })
-    escribirDatos(datos)
-    res.json({ "Mensaje": "Producto Eliminado" })
+    console.log(result)
+    res.json({mensaje:"Producto eliminado"})
+})
+
 })
 
 app.listen(port, () => {
