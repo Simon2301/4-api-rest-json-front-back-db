@@ -1,4 +1,4 @@
-fetch('https://tiendaonline-tl5r.onrender.com/productos')
+fetch('/productos')
     .then(respuesta => respuesta.json())
     // .then(datos=> console.log(datos))
     .then(datos => mostrarProductos(datos))

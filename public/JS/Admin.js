@@ -1,4 +1,4 @@
-const endpoint = 'https://tiendaonline-tl5r.onrender.com/productos'
+const endpoint = '/productos'
 mostrarMensaje = (mensaje) => {
   document.querySelector('#contMensaje').innerHTML = mensaje
 }
@@ -24,7 +24,7 @@ const obtenerDatos = async () => {
       productos +=
         `<div class="card border border-1 border-dark d-flex flex-column align-items-center"
                 style="width: 100%; max-width: 300px; margin:30px">
-                <img src="${datos.imagen}" class="card-img-top" alt="...">
+                <img src="./img/${datos.imagen}" class="card-img-top" alt="...">
                 <div class="card-body ">
                     <h4>${datos.titulo}</h4>
                     <p class="card-text ">${datos.descripcion}</p>
@@ -98,7 +98,7 @@ formulario.addEventListener('submit', (event) => {
   let titulo = formulario.Titulo.value
   let descripcion = formulario.Descripcion.value
   let precio = formulario.Precio.value
-  let img = "./img/img3.jpg"
+  let img = "img3.jpg"
   // console.log(titulo,descripcion,precio);
 
   // Objetos con los datos obtenidos en el formulario
