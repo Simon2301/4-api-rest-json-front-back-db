@@ -254,15 +254,16 @@ const editar = (id) => {
   productosRecibidos.filter(prod => {
     if (prod.id == id) {
       prodEditar = prod;
-      console.log(prodEditar);
+      //console.log(prodEditar);
     }
   });
 
   // Asigno los valores a los campos del formulario
-  formEditar.idEditar.value = prodEditar.id;
   formEditar.titulo.value = prodEditar.titulo;
   formEditar.descripcion.value = prodEditar.descripcion;
   formEditar.precio.value = prodEditar.precio;
+  formEditar.idEditar.value = prodEditar.id;
+
 };
 
 formEditar.addEventListener('submit', (event) => {
@@ -270,10 +271,12 @@ formEditar.addEventListener('submit', (event) => {
 
   // Creo objeto con nuevos datos
   const nuevosDatos = {
-    id: formEditar.idEditar.value,
     titulo: formEditar.titulo.value,
+    imagen: 'img3.jpg',
     descripcion: formEditar.descripcion.value,
-    precio: formEditar.precio.value
+    precio: formEditar.precio.value,
+    id: formEditar.idEditar.value
+
   };
 
   // Validación de campos vacíos
@@ -289,7 +292,7 @@ formEditar.addEventListener('submit', (event) => {
 
   const enviarNuevosDatos = async () => {
     try {
-      const res = await fetch(endpoint + '/' + nuevosDatos.id, {
+      const res = await fetch(endpoint, {
         method: 'PUT',
         headers: {
           'content-type': 'application/json'

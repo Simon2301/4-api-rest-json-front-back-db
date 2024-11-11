@@ -3,8 +3,11 @@ const express = require('express');
 const db = require('./db/conexion');
 const fs = require('fs') //Permite trabajar con archivos (file system) incluida con node, no se instala
 const cors = require('cors');
+require('dotenv/config')
 const app = express();
-const port = 3000;
+const port = process.env.MYSQL_ADDON_PORT || 3000
+
+
 
 
 //Middleware
@@ -22,7 +25,6 @@ app.get('/productos', (req, res) => {
             console.error("Error de lectura")
             return
         }
-        console.log(result)
         res.json(result)
     })
 
@@ -50,42 +52,48 @@ app.post('/productos', (req, res) => {
     const values = Object.values(req.body)
     const sql = "INSERT INTO productos (imagen, titulo, descripcion, precio) VALUES (?,?,?,?)"
 
-    db.query(sql, values, (err, result)=>{
-        if(err){
+    db.query(sql, values, (err, result) => {
+        if (err) {
             console.error('Error al guardar')
             return
         }
-        res.json({mensaje: "Nuevo producto agregado"})
+        res.json({ mensaje: "Nuevo producto agregado" })
     })
 })
 
-app.put('/productos/:id', (req, res) => {
-    // res.send('Actualizar producto por id')
-    const id = req.params.id;
-    const nuevosDatos = req.body;
-    const datos = leerDatos()
-    const prodEncontrado = datos.productos.find((p) => p.id == req.params.id)
-    console.log(prodEncontrado)
-    if (!prodEncontrado) {
-        return res.status(404).json({ "Mensaje": "No se encontró el producto" })
-    }
-    datos.productos = datos.productos.map(p => p.id == req.params.id ? { ...p, ...nuevosDatos } : p)
-    escribirDatos(datos)
-    res.json({ "Mensaje": "Producto Actualizado" })
+app.put('/productos', (req, res) => {
+    const values = Object.values(req.body);
+    console.log(values)
+    const sql = "UPDATE productos SET titulo=?, imagen=?, descripcion=?, precio=? WHERE id=?";
+
+
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            console.error('Error al modificar registro');
+            return;
+
+        }
+        res.json({
+            mensaje: 'Producto Actualizado',
+            data: result
+        })
+
+    })
+
 })
 
 app.delete('/productos/:id', (req, res) => {
     // res.send('Eliminando Producto')
-const id = req.params.id
-const sql =("DELETE FROM productos WHERE id= ?")
-db.query(sql,[id],(err, result)=>{
-    if(err){
-        console.error('Error al borrar')
-        return;
-    }
-    console.log(result)
-    res.json({mensaje:"Producto eliminado"})
-})
+    const id = req.params.id
+    const sql = ("DELETE FROM productos WHERE id= ?")
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            console.error('Error al borrar')
+            return;
+        }
+        console.log(result)
+        res.json({ mensaje: "Producto eliminado" })
+    })
 
 })
 
